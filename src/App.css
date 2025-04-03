@@ -6,4 +6,14 @@
   background-color: rgb(149, 223, 198);
   border-radius: 18px;
 }
+#tab-content{
+  padding: 10px;
+  width: 100%;
+  height: fit-content;
+  border-radius: 6px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
 

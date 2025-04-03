@@ -1,15 +1,18 @@
 
 import './App.css'
-import { useState } from 'react'
+import { useState,useRef } from 'react'
 import avatarPic from '../Image/avatar-cua-phuoc.jpg'
 import logo1 from '../Image/logo-1.jpg'
 import logo2 from '../Image/logo-2.png'
 import logo3 from '../Image/logo-3.webp'//lần sau nên bỏ hình trong folder assets
 import logo4 from '../Image/logo-4.webp'
 import myData from './data.js'
+import { EXAMPLES } from './data.js'
 import Header from '../components/Header/Header.jsx'
 import { Footer } from '../components/Footer/Footer.jsx'
 import TabButton from '../components/LearnPropsChildren/learnPropsChildren.jsx'
+import { ButtonKhanhNhan } from '../components/LearnPropsChildren/buttonKhanhNhan.jsx'
+import Input from '../components/LearnPropsChildren/inputTypeText.jsx'
 
 let today=new Date().toLocaleDateString();
 let timenow=new Date().toLocaleTimeString()
@@ -24,13 +27,28 @@ const user={
 };
 let hasGirlFriend=true;
 function App() {
+  const inputRef = useRef(null);
+
+  const hanClick = () => {
+    if (inputRef.current) {
+      inputRef.current.changeState();
+    }
+  };
+
   {/*State là một hàm giúp thay đổi lại trang */}
   {/* Địt mẹ, ảo vãi loz, khó hiểu đcđ
     tham số trong useState là giá trị mặc định của biến noiDungTab
     sử dụng desturing*/}
-   const[noiDungTab,hamThayDoiNoiDung]=useState("Vui lòng click vào nút");
+   const[noiDungTab,hamThayDoiNoiDung]=useState();
    function handleClick(selectedButton){
     hamThayDoiNoiDung(selectedButton);{/*Ảo vcl chỉ cần lấy nội dung của tham số truyền vào là thay đổi được luôn giá trị biến noiDungTab */}
+  }
+  const[name,changeName]=useState("Tô Quý Phước");
+  function clickChangeName(){
+    if (name==="Tô Quý Phước")
+    changeName("Nguyễn Khánh Nhân");
+    else
+    changeName("Tô Quý Phước");
   }
   const[loiChao,thayDoiLoiChao]=useState("Chào bạn");
   function clickLoiChao(){
@@ -82,16 +100,37 @@ function App() {
             <HoatDong {...myData[3]} />
           </ul>
           <ul class="ngonNguPhuocDung"> 
-          <TabButton onSelect={()=>{handleClick("con mẹ nó")}}>Con mẹ nó</TabButton>
-          <TabButton onSelect={()=>{handleClick("Vcl")}}>Vcl</TabButton>
-          <TabButton onSelect={()=>{handleClick("Haha")}}>Haha</TabButton>
-          <TabButton onSelect={()=>{handleClick("mơ đi cưng")}}>Mơ đi cưng</TabButton>
+          <TabButton onSelect={()=>{handleClick("components")}}>Con mẹ nó</TabButton>
+          <TabButton onSelect={()=>{handleClick("jsx")}}>Vcl</TabButton>
+          <TabButton onSelect={()=>{handleClick("props")}}>Haha</TabButton>
+          <TabButton onSelect={()=>{handleClick("state")}}>Mơ đi cưng</TabButton>
           </ul>
-          {noiDungTab}
+          {!noiDungTab?(<p>Xin vui lòng chọn 1 tab</p>):(
+          <div id="tab-content">
+            <h3>{EXAMPLES[noiDungTab].title}</h3>
+            <p>{EXAMPLES[noiDungTab].desc}</p>
+            <pre>
+              <code>{EXAMPLES[noiDungTab].code}</code>
+            </pre>
+          </div>
+          )}
         </div>
         <button onClick={clickLoiChao}>Click vào để thay đổi lời chào</button>
         <br></br>
         {loiChao}
+      </div>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      {/* <button onClick={()=>{clickChangeName("Nguyễn Khánh Nhân")}}>Bấm vào đây để thay đổi tên</button> */}
+      <ButtonKhanhNhan onSelect={clickChangeName}>Click để đổi tên</ButtonKhanhNhan>
+      <br></br>
+      <p>{name}</p>
+
+      <div>
+        <button onClick={hanClick}>Thay đổi state trong Input</button>
+        <Input ref={inputRef} />
       </div>
       <Footer/>
     </>
