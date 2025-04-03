@@ -60,6 +60,23 @@ function App() {
     else
       thayDoiLoiChao("Chào buổi tối");
   }
+
+  const [isActivedButton,setActivedButton]=useState(true);
+  const [isActivedDialog,setActiveDialog]=useState(false);
+  
+  function ActiveHandleButton(){
+    setActiveDialog(true);
+    setActivedButton(false);
+  }
+  function ActiveHandleDialog(){
+    setActivedButton(false);
+    setActiveDialog(false);
+  }
+  function CancelHandleDialog(){
+    setActivedButton(true);
+    setActiveDialog(false);
+  }
+      
   return (
     <>
       <Header></Header>
@@ -129,9 +146,26 @@ function App() {
       <p>{name}</p>
 
       <div>
-        <button onClick={hanClick}>Thay đổi state trong Input</button>
+        <button onClick={hanClick}>Thay đổi state trong Input, cái này khó, chưa hiểu</button>
         <Input ref={inputRef} />
       </div>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      
+      {isActivedButton&&!isActivedDialog&&(<button className="action-btn" onClick={ActiveHandleButton}>Activate</button>)}
+      {!isActivedButton&&isActivedDialog&& (<div className="alert-box">
+          <h2>Warning!</h2>
+          <p>Are you sure you want to activate this mode?</p>
+          <button className="confirm-btn" onClick={ActiveHandleDialog}>Confirm</button>
+          <button className="cancel-btn" onClick={CancelHandleDialog}>Cancel</button>
+        </div>
+      )
+      }
+      {!isActivedButton&&!isActivedDialog&&(<h3 className="success-message">Mode Activated!</h3>)}
+
+
       <Footer/>
     </>
   )
