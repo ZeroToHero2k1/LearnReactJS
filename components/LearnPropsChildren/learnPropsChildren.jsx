@@ -14,13 +14,13 @@
 //     );
 // }
 
-export default function TabButton({children,onSelect}){
+export default function TabButton({children,onSelect,isSelected}){
     // function handleClick(){
     //     alert("Nút bấm đã được bấm");
     // }
     return (
         <li>
-            <button onClick={onSelect}>{children}</button>
+            <button className={isSelected?"active":undefined} onClick={onSelect}>{children}</button>
             {/* //phải gõ đúng thuộc tính children của Props nó mới ra innerHTML */}
         </li>
         

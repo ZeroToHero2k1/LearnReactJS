@@ -16,4 +16,16 @@
   flex-direction: column;
   text-align: left;
 }
-
+.active{
+  background-color: blueviolet;
+  color: white;
+  border-radius: 6px;
+  border: 1px solid white;
+}
+.activeP {
+  color: #448871;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 0 4px 8px #5b16c39a;
+  transform: scale(1.2);
+}

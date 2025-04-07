@@ -13,6 +13,7 @@ import { Footer } from '../components/Footer/Footer.jsx'
 import TabButton from '../components/LearnPropsChildren/learnPropsChildren.jsx'
 import { ButtonKhanhNhan } from '../components/LearnPropsChildren/buttonKhanhNhan.jsx'
 import Input from '../components/LearnPropsChildren/inputTypeText.jsx'
+import { ButtonBaiHoc } from '../components/LearnPropsChildren/buttonBaiHocLienQuan.jsx'
 
 let today=new Date().toLocaleDateString();
 let timenow=new Date().toLocaleTimeString()
@@ -43,6 +44,20 @@ function App() {
    function handleClick(selectedButton){
     hamThayDoiNoiDung(selectedButton);{/*Ảo vcl chỉ cần lấy nội dung của tham số truyền vào là thay đổi được luôn giá trị biến noiDungTab */}
   }
+  let tabContent=<p>Vui lòng chọn 1 chủ đề</p>;
+  if (noiDungTab){
+    tabContent=(
+      <div id="tab-content">
+            <h3>{EXAMPLES[noiDungTab].title}</h3>
+            <p>{EXAMPLES[noiDungTab].desc}</p>
+            <pre>
+              <code>{EXAMPLES[noiDungTab].code}</code>
+            </pre>
+          </div>
+    );
+  }
+  
+
   const[name,changeName]=useState("Tô Quý Phước");
   function clickChangeName(){
     if (name==="Tô Quý Phước")
@@ -61,22 +76,30 @@ function App() {
       thayDoiLoiChao("Chào buổi tối");
   }
 
-  const [isActivedButton,setActivedButton]=useState(true);
+  const [isActivedButton,setActivedButton]=useState(false);
   const [isActivedDialog,setActiveDialog]=useState(false);
   
   function ActiveHandleButton(){
-    setActiveDialog(true);
-    setActivedButton(false);
+    setActivedButton(true);
   }
   function ActiveHandleDialog(){
     setActivedButton(false);
-    setActiveDialog(false);
+    setActiveDialog(true);
   }
   function CancelHandleDialog(){
-    setActivedButton(true);
+    setActivedButton(false);
     setActiveDialog(false);
   }
-      
+
+  const [isBiggerDiv,setBiggerDiv]=useState(false);
+  function clickToBigger(){
+    if(!isBiggerDiv)
+      setBiggerDiv(true);
+    else
+      setBiggerDiv(false);
+    
+  }
+  const myBook=["Bài 1: Hồi máu","Bài 2: Trừng trị","Bài 3:Bộc phá"]
   return (
     <>
       <Header></Header>
@@ -115,14 +138,18 @@ function App() {
             <HoatDong {...myData[1]} />
             <HoatDong {...myData[2]} />
             <HoatDong {...myData[3]} />
+            {/* Hoặc là  */}
+            {myData.map((item)=>(
+              <HoatDong key={item.tenHoatDong} {...item}/>
+            ))}
           </ul>
           <ul class="ngonNguPhuocDung"> 
-          <TabButton onSelect={()=>{handleClick("components")}}>Con mẹ nó</TabButton>
-          <TabButton onSelect={()=>{handleClick("jsx")}}>Vcl</TabButton>
-          <TabButton onSelect={()=>{handleClick("props")}}>Haha</TabButton>
-          <TabButton onSelect={()=>{handleClick("state")}}>Mơ đi cưng</TabButton>
+          <TabButton isSelected={noiDungTab==="component"} onSelect={()=>{handleClick("components")}}>Con mẹ nó</TabButton>
+          <TabButton isSelected={noiDungTab==="jsx"} onSelect={()=>{handleClick("jsx")}}>Vcl</TabButton>
+          <TabButton isSelected={noiDungTab==="props"} onSelect={()=>{handleClick("props")}}>Haha</TabButton>
+          <TabButton isSelected={noiDungTab==="state"} onSelect={()=>{handleClick("state")}}>Mơ đi cưng</TabButton>
           </ul>
-          {!noiDungTab?(<p>Xin vui lòng chọn 1 tab</p>):(
+          {/* {!noiDungTab?(<p>Xin vui lòng chọn 1 tab</p>):(
           <div id="tab-content">
             <h3>{EXAMPLES[noiDungTab].title}</h3>
             <p>{EXAMPLES[noiDungTab].desc}</p>
@@ -130,7 +157,8 @@ function App() {
               <code>{EXAMPLES[noiDungTab].code}</code>
             </pre>
           </div>
-          )}
+          )} */}
+          {tabContent}
         </div>
         <button onClick={clickLoiChao}>Click vào để thay đổi lời chào</button>
         <br></br>
@@ -154,8 +182,8 @@ function App() {
       <br></br>
       <br></br>
       
-      {isActivedButton&&!isActivedDialog&&(<button className="action-btn" onClick={ActiveHandleButton}>Activate</button>)}
-      {!isActivedButton&&isActivedDialog&& (<div className="alert-box">
+      {!isActivedButton&&!isActivedDialog&&(<button className="action-btn" onClick={ActiveHandleButton}>Activate</button>)}
+      {isActivedButton&& (<div className="alert-box">
           <h2>Warning!</h2>
           <p>Are you sure you want to activate this mode?</p>
           <button className="confirm-btn" onClick={ActiveHandleDialog}>Confirm</button>
@@ -163,9 +191,22 @@ function App() {
         </div>
       )
       }
-      {!isActivedButton&&!isActivedDialog&&(<h3 className="success-message">Mode Activated!</h3>)}
-
-
+      {!isActivedButton&&isActivedDialog&&(<h3 className="success-message">Mode Activated!</h3>)}
+      <br></br>
+      
+      <div className="container">
+        <p className={isBiggerDiv?"activeP":undefined}>Click vào em!</p>
+        <button onClick={clickToBigger}>Toggle btn</button>
+      </div>
+      <br></br>
+      <div>
+        <h2>Đây là các bài học trong sách</h2>
+        <ul>
+          {myBook.map((item,index)=>(
+            <ButtonBaiHoc key={index}>{item}</ButtonBaiHoc>
+          ))}
+        </ul>
+      </div>
       <Footer/>
     </>
   )
